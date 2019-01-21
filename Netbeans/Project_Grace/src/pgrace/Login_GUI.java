@@ -1,5 +1,6 @@
 package pgrace;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,19 +33,6 @@ public class Login_GUI extends javax.swing.JFrame {
             printWriter = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException ex) {
         }
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//
-//                } catch (IOException ex) {
-//                    Logger.getLogger(Login_GUI.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//
-//            }
-//        }).start();
 
     }
 
@@ -84,6 +72,11 @@ public class Login_GUI extends javax.swing.JFrame {
                 loginpwvActionPerformed(evt);
             }
         });
+        loginpwv.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                loginpwvKeyPressed(evt);
+            }
+        });
 
         loginidv.setText("아이디를 입력해주세요.");
         loginidv.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -94,6 +87,11 @@ public class Login_GUI extends javax.swing.JFrame {
         loginidv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginidvActionPerformed(evt);
+            }
+        });
+        loginidv.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                loginidvKeyPressed(evt);
             }
         });
 
@@ -191,69 +189,36 @@ public class Login_GUI extends javax.swing.JFrame {
                 loginpwv.requestFocus();
             } else {
                 BufferedReader br = null;
-                
+
                 try {
-                    String login = "login/" + id +"/"+ password + "/";
-                    //                sendMsg(login);
+                    String login = "login/" + id + "/" + password + "/";
                     printWriter.println(login);
                     printWriter.flush();
-                    
+
                     br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     String receive = br.readLine();
-                    
+
                     if (receive.equals("login/true/")) {
                         JOptionPane.showMessageDialog(this, "로그인 되었습니다.");;
-                        
+
                     } else if (receive.equals("login/false/")) {
                         JOptionPane.showMessageDialog(this, "비밀번호를 다시 입력해주세요.");
                         loginpwv.setText("");
-                    
+
                     } else if (receive.equals("id/none/")) {
                         JOptionPane.showMessageDialog(this, "아이디가 없습니다.");
                         loginpwv.setText("");
                         loginidv.setText("");
                     }
                 } catch (IOException ex) {
-                } 
-
                 }
+
             }
+        }
 
-//        if (id.equals(testid) && password.equals(testid)) {
-//            JOptionPane.showMessageDialog(this, "로그인 되었습니다.");;
-//
-//        } else if (id.equals(testid) || !password.equals(testpwd)) {
-//            JOptionPane.showMessageDialog(this, "비밀번호를 다시 입력해주세요.");
-//            loginpwv.setText("");
-//        } else if (!id.equals(testid) || !password.equals(testpwd)) {
-//            JOptionPane.showMessageDialog(this, "아이디와 비밀번호를 다시 입력해주세요.");
-//            loginidv.setText("");
-//            loginpwv.setText("");
-//        }
-//                        
-//        JSONParser parser = new JSONParser(); // 불러오기?
-//        JSONObject memberInfo = new JSONObject(); // 값에 대한 객체 생성
-//
-//        try {
-//            JSONObject members = (JSONObject) parser.parse(new FileReader("C:\\HANNA_GitHub\\HANNA_GitHub\\Netbeans\\Project_Grace\\src\\pgrace\\JsonGrace.json"));
-//            //키에 대한 객체 생성 --> 불러오기
-//
-//        } catch (FileNotFoundException ex) {
-//        } catch (IOException e) {
-//        } catch (ParseException e) {
-//
-//        }
-            System.out.println("memberInfo");
+        System.out.println("memberInfo");
 
-//        try {  
-//       Object obj = parser.parse("C:\\HANNA_GitHub\\HANNA_GitHub\\Netbeans\\Project_Grace\\src\\pgrace\\JsonGrace.json");
-//       JSONObject jsonObject = (JSONObject) obj;
-//        //키에 대한 객체 생성 --> 불러오기
-//        String loginid = (String) jsonObject.get("ID");
-//        String loginpw = (String) jsonObject.get("PW");
-//        }  catch(ParseException e){
-//        }
-            // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_loginBtnActionPerformed
 
     private void loginpwvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginpwvActionPerformed
@@ -274,7 +239,66 @@ public class Login_GUI extends javax.swing.JFrame {
 
     private void loginidvMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginidvMouseClicked
         loginidv.setText("");
+        loginpwv.setText("");
     }//GEN-LAST:event_loginidvMouseClicked
+
+    private void loginpwvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginpwvKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String id = loginidv.getText().trim();
+            String password = loginpwv.getText().trim();
+
+            String testid = "12345";
+            String testpwd = "00000";
+
+            if (id.equals("")) {
+                JOptionPane.showMessageDialog(this, "아이디를 입력해주세요");
+                loginidv.requestFocus();
+            } else {
+                if (password.equals("")) {
+                    JOptionPane.showMessageDialog(this, "비밀번호를 입력해주세요");
+                    loginpwv.requestFocus();
+                } else {
+                    BufferedReader br = null;
+
+                    try {
+                        String login = "login/" + id + "/" + password + "/";
+                        printWriter.println(login);
+                        printWriter.flush();
+
+                        br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        String receive = br.readLine();
+
+                        if (receive.equals("login/true/")) {
+                            JOptionPane.showMessageDialog(this, "로그인 되었습니다.");;
+
+                        } else if (receive.equals("login/false/")) {
+                            JOptionPane.showMessageDialog(this, "비밀번호를 다시 입력해주세요.");
+                            loginpwv.setText("");
+
+                        } else if (receive.equals("id/none/")) {
+                            JOptionPane.showMessageDialog(this, "아이디가 없습니다.");
+                            loginpwv.setText("");
+                            loginidv.setText("");
+                        }
+                    } catch (IOException ex) {
+                    }
+
+                }
+            }
+
+            System.out.println("memberInfo");
+
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loginpwvKeyPressed
+
+    private void loginidvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginidvKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            loginpwv.setText("");
+        }
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_loginidvKeyPressed
 
     /**
      * @param args the command line arguments

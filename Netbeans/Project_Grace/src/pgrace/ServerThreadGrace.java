@@ -50,31 +50,14 @@ public class ServerThreadGrace implements Runnable {
                 String clientMsg = br.readLine(); //client 메소드 호출
 
                 System.out.println(clientMsg);
-//                server.sendMessage(clientMsg);
                 StringTokenizer stz = new StringTokenizer(clientMsg, "/");
                 String token = stz.nextToken();
-//                if (!clientMsg.equals(null)) {
-//                    server.sendMessage(clientMsg);
-//                } else 
-//                if (token.equals("id_check")) {
-//                    // "id_check/아이디/null/null"
-//                    // 중복확인하는 로직
-//                    if (stz.nextToken().equals("aa")) {
-//                        System.out.println("true");
-//                        printWriter.println("id_check/true/");
-//                    } else {
-//                        System.out.println("flase");
-//                        printWriter.println("id_check/false/");
-//                    }
-//            }
 
                 // 아이디 체크하는 로직
                 if (token.equals("login")) {
                     String id = stz.nextToken();
                     String pw = stz.nextToken();
                     JSONObject members = (JSONObject) parser.parse(new FileReader("C:\\HANNA_GitHub\\HANNA_GitHub\\Netbeans\\Project_Grace\\src\\pgrace\\JsonGrace.json"));
-                    //키에 대한 객체 생성 --> 불러오기
-                    //Set ids = members.keySet();
 
                     JSONObject member_id = (JSONObject) members.get(id);
 
